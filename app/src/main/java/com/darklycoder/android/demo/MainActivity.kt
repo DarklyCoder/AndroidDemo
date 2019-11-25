@@ -3,6 +3,7 @@ package com.darklycoder.android.demo
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.darklycoder.android.demo.gles.GLESPage
 import com.darklycoder.android.demo.sensor.camera.CameraIndexPage
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -13,5 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mBtnCamera.setOnClickListener { startActivity(Intent(this, CameraIndexPage::class.java)) }
+
+        mBtnOpenGLES.setOnClickListener { startActivity(Intent(this, GLESPage::class.java)) }
     }
 }

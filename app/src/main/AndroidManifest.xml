@@ -27,6 +27,8 @@
         <activity android:name=".sensor.camera.CameraV2Page" />
         <activity android:name=".sensor.camera.CameraXPage" />
         <activity android:name=".sensor.camera.CameraGLSurfaceViewPage" />
+
+        <activity android:name=".gles.GLESPage" />
     </application>
 
 </manifest>
