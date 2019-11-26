@@ -7,15 +7,16 @@ import android.util.Log
 import com.darklycoder.android.demo.gles.ShaderHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 /**
  * 绘制曲棍球
  *
- * 实现3D效果
+ * 实现纹理效果
  */
-class AirHockey3DRender : GLSurfaceView.Renderer {
+class AirHockeyTexturedRender : GLSurfaceView.Renderer {
 
     companion object {
         const val BYTES_PER_FLOAT = 4
@@ -25,21 +26,6 @@ class AirHockey3DRender : GLSurfaceView.Renderer {
         const val STRIDE = (POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) * BYTES_PER_FLOAT
     }
 
-    //    private val tableVertices = floatArrayOf(
-//        // X,Y,Z,W,R,G,B
-//        0f, 0f, 0f, 1.5f, 1f, 1f, 1f,
-//        -0.5f, -0.8f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-//        0.5f, -0.8f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-//        0.5f, 0.8f, 0f, 2f, 0.7f, 0.7f, 0.7f,
-//        -0.5f, 0.8f, 0f, 2f, 0.7f, 0.7f, 0.7f,
-//        -0.5f, -0.8f, 0f, 1f, 0.7f, 0.7f, 0.7f,
-//
-//        -0.5f, 0f, 0f, 1.5f, 1f, 0f, 0f,
-//        0.5f, 0f, 0f, 1.5f, 1f, 0f, 0f,
-//
-//        0f, -0.4f, 0f, 1.25f, 0f, 0f, 1f,
-//        0f, 0.4f, 0f, 1.75f, 1f, 0f, 0f
-//    )
     private val tableVertices = floatArrayOf(
         // X,Y,R,G,B
         0f, 0f, 1f, 1f, 1f,
@@ -87,6 +73,34 @@ class AirHockey3DRender : GLSurfaceView.Renderer {
         |void main()
         |{
         |    gl_FragColor = v_Color;
+        |}
+        """.trimMargin()
+
+    private val textureVertexShaderCode =
+        """
+        |uniform mat4 u_Matrix;
+        |
+        |attribute vec4 a_Position;
+        |attribute vec2 a_TextureCoordinates;
+        |
+        |varying vec2 v_TextureCoordinates;
+        |
+        |void main()
+        |{
+        |   v_TextureCoordinates = a_TextureCoordinates;
+        |   gl_Position = u_Matrix * a_Position;
+        |}
+        """.trimIndent()
+
+    private val textureFragmentShaderCode =
+        """
+        |precision mediump float;
+        |uniform sampler2D u_TextureUnit;
+        |varying vec2 v_TextureCoordinates;
+        |
+        |void main()
+        |{
+        |    gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);
         |}
         """.trimMargin()
 
@@ -170,6 +184,56 @@ class AirHockey3DRender : GLSurfaceView.Renderer {
         glDrawArrays(GL_LINES, 6, 2)
         glDrawArrays(GL_POINTS, 8, 1)
         glDrawArrays(GL_POINTS, 9, 1)
+    }
+
+    class VertexArray(vertexData: FloatArray) {
+
+        private val floatBuffer: FloatBuffer = ByteBuffer
+            .allocateDirect(vertexData.size * BYTES_PER_FLOAT)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
+            .put(vertexData)
+
+        fun setVertextAttributePoint(
+            dataOffset: Int,
+            attributeLocation: Int,
+            componentCount: Int,
+            stride: Int
+        ) {
+            floatBuffer.position(dataOffset)
+
+            glVertexAttribPointer(
+                attributeLocation,
+                componentCount,
+                GL_FLOAT,
+                false,
+                stride,
+                floatBuffer
+            )
+            glEnableVertexAttribArray(attributeLocation)
+
+            floatBuffer.position(0)
+        }
+    }
+
+    class Table {
+        companion object {
+            const val POSITION_COMPONENT_COUNT = 2
+            const val TEXTURE_COORDINATES_COMPONENT_COUNT = 2
+            const val STRIDE =
+                (POSITION_COMPONENT_COUNT + TEXTURE_COORDINATES_COMPONENT_COUNT) * BYTES_PER_FLOAT
+        }
+
+        private val VERTEX_DATA = floatArrayOf(
+            // X,Y,S,T
+            0f, 0f, 0.5f, 0.5f,
+            -0.5f, -0.8f, 0f, 0.9f,
+            0.5f, -0.8f, 1f, 0.9f,
+            0.5f, 0.8f, 1f, 0.1f,
+            -0.5f, 0.8f, 0f, 0.1f,
+            -0.5f, -0.8f, 0f, 0.9f
+        )
+
     }
 
 }

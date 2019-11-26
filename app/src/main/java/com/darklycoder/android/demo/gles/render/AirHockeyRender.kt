@@ -42,6 +42,7 @@ class AirHockeyRender : GLSurfaceView.Renderer {
         .allocateDirect(tableVertices.size * BYTES_PER_FLOAT)
         .order(ByteOrder.nativeOrder())
         .asFloatBuffer()
+        .put(tableVertices)
 
     private val vertexShaderCode =
         """
@@ -68,10 +69,6 @@ class AirHockeyRender : GLSurfaceView.Renderer {
     private var mProgramId: Int = 0
     private var uColorLocation: Int = 0
     private var aPositionLocation: Int = 0
-
-    init {
-        vertexData.put(tableVertices)
-    }
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
         Log.d("Render", "onSurfaceCreated")
