@@ -2,6 +2,7 @@ package com.darklycoder.android.demo.gles.render
 
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
+import android.opengl.Matrix.orthoM
 import android.util.Log
 import com.darklycoder.android.demo.gles.ShaderHelper
 import java.nio.ByteBuffer
@@ -12,9 +13,9 @@ import javax.microedition.khronos.opengles.GL10
 /**
  * 绘制曲棍球
  *
- * 绘制桌面，使用三角扇
+ * 绘制桌面，适配横竖屏
  */
-class AirHockey2Render : GLSurfaceView.Renderer {
+class AirHockey3Render : GLSurfaceView.Renderer {
 
     companion object {
         const val BYTES_PER_FLOAT = 4
@@ -26,17 +27,17 @@ class AirHockey2Render : GLSurfaceView.Renderer {
     private val tableVertices = floatArrayOf(
         // X,Y,R,G,B
         0f, 0f, 1f, 1f, 1f,
-        -0.5f, -0.5f, 0.7f, 0.7f, 0.7f,
-        0.5f, -0.5f, 0.7f, 0.7f, 0.7f,
-        0.5f, 0.5f, 0.7f, 0.7f, 0.7f,
-        -0.5f, 0.5f, 0.7f, 0.7f, 0.7f,
-        -0.5f, -0.5f, 0.7f, 0.7f, 0.7f,
+        -0.5f, -0.8f, 0.7f, 0.7f, 0.7f,
+        0.5f, -0.8f, 0.7f, 0.7f, 0.7f,
+        0.5f, 0.8f, 0.7f, 0.7f, 0.7f,
+        -0.5f, 0.8f, 0.7f, 0.7f, 0.7f,
+        -0.5f, -0.8f, 0.7f, 0.7f, 0.7f,
 
         -0.5f, 0f, 1f, 0f, 0f,
         0.5f, 0f, 1f, 0f, 0f,
 
-        0f, -0.25f, 0f, 0f, 1f,
-        0f, 0.25f, 1f, 0f, 0f
+        0f, -0.4f, 0f, 0f, 1f,
+        0f, 0.4f, 1f, 0f, 0f
     )
     private val vertexData = ByteBuffer
         .allocateDirect(tableVertices.size * BYTES_PER_FLOAT)
@@ -45,6 +46,8 @@ class AirHockey2Render : GLSurfaceView.Renderer {
 
     private val vertexShaderCode =
         """
+        |uniform mat4 u_Matrix;
+        |
         |attribute vec4 a_Position;
         |attribute vec4 a_Color;
         |
@@ -54,7 +57,7 @@ class AirHockey2Render : GLSurfaceView.Renderer {
         |{
         |    v_Color = a_Color;
         |    
-        |    gl_Position = a_Position;
+        |    gl_Position = u_Matrix * a_Position;
         |    gl_PointSize = 10.0;
         |}
         """.trimMargin()
@@ -71,8 +74,10 @@ class AirHockey2Render : GLSurfaceView.Renderer {
         """.trimMargin()
 
     private var mProgramId: Int = 0
+    private var uMatrixLocation: Int = 0
     private var aColorLocation: Int = 0
     private var aPositionLocation: Int = 0
+    private val projectionMatrix = FloatArray(16)
 
     init {
         vertexData.put(tableVertices)
@@ -89,6 +94,7 @@ class AirHockey2Render : GLSurfaceView.Renderer {
 
         glUseProgram(mProgramId)
 
+        uMatrixLocation = glGetUniformLocation(mProgramId, "u_Matrix")
         aColorLocation = glGetAttribLocation(mProgramId, "a_Color")
         aPositionLocation = glGetAttribLocation(mProgramId, "a_Position")
 
@@ -118,11 +124,24 @@ class AirHockey2Render : GLSurfaceView.Renderer {
     override fun onSurfaceChanged(p0: GL10?, w: Int, h: Int) {
         Log.d("Render", "onSurfaceChanged,w:$w,h:$h")
         glViewport(0, 0, w, h)
+
+        val aspectRatio = if (w > h) w.toFloat() / h else h.toFloat() / w
+
+        if (w > h) {
+            // 横屏
+            orthoM(projectionMatrix, 0, -aspectRatio, aspectRatio, -1F, 1F, -1F, 1F)
+
+        } else {
+            // 竖屏
+            orthoM(projectionMatrix, 0, -1F, 1F, -aspectRatio, aspectRatio, -1F, 1F)
+        }
     }
 
     override fun onDrawFrame(p0: GL10?) {
         Log.d("Render", "onDrawFrame")
         glClear(GL_COLOR_BUFFER_BIT)
+
+        glUniformMatrix4fv(uMatrixLocation, 1, false, projectionMatrix, 0)
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, 6)
         glDrawArrays(GL_LINES, 6, 2)

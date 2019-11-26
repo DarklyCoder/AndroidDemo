@@ -6,10 +6,14 @@ import android.util.Log
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
+/**
+ * 空Render，了解Render相关回调
+ */
 class EmptyRender : GLSurfaceView.Renderer {
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
         Log.d("Render", "onSurfaceCreated")
+        // 设置背景颜色
         glClearColor(1F, 0F, 0F, 0F)
     }
 

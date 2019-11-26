@@ -9,6 +9,11 @@ import java.nio.ByteOrder
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
+/**
+ * 绘制曲棍球
+ *
+ * 绘制桌面
+ */
 class AirHockeyRender : GLSurfaceView.Renderer {
 
     companion object {
@@ -16,7 +21,9 @@ class AirHockeyRender : GLSurfaceView.Renderer {
         const val POSITION_COMPONENT_COUNT = 2
     }
 
+    // 定义桌面相关顶点
     private val tableVertices = floatArrayOf(
+        // X,Y
         -0.5f, -0.5f,
         0.5f, 0.5f,
         -0.5f, 0.5f,

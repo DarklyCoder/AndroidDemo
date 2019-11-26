@@ -3,7 +3,7 @@ package com.darklycoder.android.demo.gles
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import com.darklycoder.android.demo.base.BasePage
-import com.darklycoder.android.demo.gles.render.AirHockey2Render
+import com.darklycoder.android.demo.gles.render.AirHockey3DRender
 
 /**
  * GLES demo
@@ -23,7 +23,7 @@ class GLESPage : BasePage() {
 
     private fun initParams() {
         mGlSurfaceView.setEGLContextClientVersion(2)
-        mGlSurfaceView.setRenderer(AirHockey2Render())
+        mGlSurfaceView.setRenderer(AirHockey3DRender())
         mGlSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
 

@@ -1,6 +1,7 @@
 package com.darklycoder.android.demo.gles
 
 import android.opengl.GLES20.*
+import kotlin.math.tan
 
 object ShaderHelper {
 
@@ -63,6 +64,30 @@ object ShaderHelper {
         glGetProgramiv(programObjId, GL_VALIDATE_STATUS, validateStatus, 0)
 
         return 0 != validateStatus[0]
+    }
+
+    /**
+     * 创建投影矩阵
+     */
+    fun perspectiveM(m: FloatArray, yFovInDegrees: Float, aspect: Float, n: Float, f: Float) {
+        val angleInRadians = yFovInDegrees * Math.PI / 180F
+        val a: Float = (1f / tan(angleInRadians / 2)).toFloat()
+
+        m.forEachIndexed { index, _ ->
+            m[index] = when (index) {
+                0 -> a / aspect
+
+                5 -> a
+
+                10 -> -(f + n) / (f - n)
+
+                11 -> -1f
+
+                14 -> -(2f * f * n) / (f - n)
+
+                else -> 0f
+            }
+        }
     }
 
 }
