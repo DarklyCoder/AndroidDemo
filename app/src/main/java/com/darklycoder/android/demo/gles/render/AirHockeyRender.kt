@@ -2,7 +2,7 @@ package com.darklycoder.android.demo.gles.render
 
 import android.content.Context
 import android.opengl.GLES20.*
-import com.darklycoder.android.demo.gles.ShaderHelper
+import com.darklycoder.android.demo.gles.utils.ShaderHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.microedition.khronos.egl.EGLConfig

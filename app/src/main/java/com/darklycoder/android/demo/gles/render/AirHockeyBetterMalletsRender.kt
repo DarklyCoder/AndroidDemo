@@ -4,11 +4,11 @@ import android.content.Context
 import android.opengl.GLES20.*
 import android.opengl.Matrix.*
 import com.darklycoder.android.demo.R
-import com.darklycoder.android.demo.gles.utils.ShaderHelper
 import com.darklycoder.android.demo.gles.objects.Mallet
 import com.darklycoder.android.demo.gles.objects.Table
 import com.darklycoder.android.demo.gles.program.ColorShaderProgram
 import com.darklycoder.android.demo.gles.program.TextureShaderProgram
+import com.darklycoder.android.demo.gles.utils.ShaderHelper
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -16,8 +16,9 @@ import javax.microedition.khronos.opengles.GL10
  * 绘制曲棍球
  *
  * 实现纹理效果
+ * 优化木槌
  */
-class AirHockeyTexturedRender(context: Context) : BaseRender(context) {
+class AirHockeyBetterMalletsRender(context: Context) : BaseRender(context) {
 
     companion object {
         private val vertexShaderCode =

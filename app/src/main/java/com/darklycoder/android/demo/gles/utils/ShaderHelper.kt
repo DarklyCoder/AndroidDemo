@@ -1,4 +1,4 @@
-package com.darklycoder.android.demo.gles
+package com.darklycoder.android.demo.gles.utils
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -133,10 +133,21 @@ object ShaderHelper {
     }
 
     fun buildProgram(vertexShaderSource: String, fragmentShaderSource: String): Int {
-        val vertex = compileShader(GL_VERTEX_SHADER, vertexShaderSource)
-        val fragment = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource)
+        val vertex =
+            compileShader(
+                GL_VERTEX_SHADER,
+                vertexShaderSource
+            )
+        val fragment =
+            compileShader(
+                GL_FRAGMENT_SHADER,
+                fragmentShaderSource
+            )
 
-        return linkProgram(vertex, fragment)
+        return linkProgram(
+            vertex,
+            fragment
+        )
     }
 
 }
