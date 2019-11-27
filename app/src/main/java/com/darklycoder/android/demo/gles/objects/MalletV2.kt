@@ -4,7 +4,7 @@ import com.darklycoder.android.demo.gles.data.VertexArray
 import com.darklycoder.android.demo.gles.program.ColorShaderProgramV2
 import com.darklycoder.android.demo.gles.utils.GeometryHelper
 
-class Puck(radius: Float, val height: Float, numPointsAroundPuck: Int) {
+class MalletV2(radius: Float, val height: Float, numPointsAroundMallet: Int) {
 
     companion object {
         private const val POSITION_COMPONENT_COUNT = 3
@@ -14,22 +14,12 @@ class Puck(radius: Float, val height: Float, numPointsAroundPuck: Int) {
     private val drawList: List<GeometryHelper.DrawCommand>
 
     init {
-        val cylinder =
-            GeometryHelper.Cylinder(
-                GeometryHelper.Point(
-                    0f,
-                    0f,
-                    0f
-                ),
-                radius,
-                height
-            )
-        val generatedData =
-            GeometryHelper.createPuck(
-                cylinder,
-                numPointsAroundPuck
-            )
-
+        val generatedData = GeometryHelper.createMallet(
+            GeometryHelper.Point(0f, 0f, 0f),
+            radius,
+            height,
+            numPointsAroundMallet
+        )
         vertexArray = VertexArray(generatedData.vertexData)
         drawList = generatedData.drawList
     }
