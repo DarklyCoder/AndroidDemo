@@ -23,7 +23,7 @@ class GLESPage : BasePage() {
 
     private fun initParams() {
         mGlSurfaceView.setEGLContextClientVersion(2)
-        mGlSurfaceView.setRenderer(AirHockeyTexturedRender())
+        mGlSurfaceView.setRenderer(AirHockeyTexturedRender(this))
         mGlSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
 

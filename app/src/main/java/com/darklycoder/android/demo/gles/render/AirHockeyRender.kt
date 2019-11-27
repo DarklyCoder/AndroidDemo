@@ -1,8 +1,7 @@
 package com.darklycoder.android.demo.gles.render
 
+import android.content.Context
 import android.opengl.GLES20.*
-import android.opengl.GLSurfaceView
-import android.util.Log
 import com.darklycoder.android.demo.gles.ShaderHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -14,7 +13,7 @@ import javax.microedition.khronos.opengles.GL10
  *
  * 绘制桌面
  */
-class AirHockeyRender : GLSurfaceView.Renderer {
+class AirHockeyRender(context: Context) : BaseRender(context) {
 
     companion object {
         const val BYTES_PER_FLOAT = 4
@@ -71,7 +70,8 @@ class AirHockeyRender : GLSurfaceView.Renderer {
     private var aPositionLocation: Int = 0
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
-        Log.d("Render", "onSurfaceCreated")
+        super.onSurfaceCreated(p0, p1)
+
         glClearColor(0F, 0F, 0F, 0F)
 
         val vertexShader = ShaderHelper.compileShader(GL_VERTEX_SHADER, vertexShaderCode)
@@ -97,12 +97,14 @@ class AirHockeyRender : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(p0: GL10?, w: Int, h: Int) {
-        Log.d("Render", "onSurfaceChanged,w:$w,h:$h")
+        super.onSurfaceChanged(p0, w, h)
+
         glViewport(0, 0, w, h)
     }
 
     override fun onDrawFrame(p0: GL10?) {
-        Log.d("Render", "onDrawFrame")
+        super.onDrawFrame(p0)
+
         glClear(GL_COLOR_BUFFER_BIT)
 
         glUniform4f(uColorLocation, 1f, 1f, 1f, 1f)

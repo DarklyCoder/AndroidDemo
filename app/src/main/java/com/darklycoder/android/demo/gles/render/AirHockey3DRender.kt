@@ -1,9 +1,8 @@
 package com.darklycoder.android.demo.gles.render
 
+import android.content.Context
 import android.opengl.GLES20.*
-import android.opengl.GLSurfaceView
 import android.opengl.Matrix.*
-import android.util.Log
 import com.darklycoder.android.demo.gles.ShaderHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -15,7 +14,7 @@ import javax.microedition.khronos.opengles.GL10
  *
  * 实现3D效果
  */
-class AirHockey3DRender : GLSurfaceView.Renderer {
+class AirHockey3DRender(context: Context) : BaseRender(context) {
 
     companion object {
         const val BYTES_PER_FLOAT = 4
@@ -98,7 +97,8 @@ class AirHockey3DRender : GLSurfaceView.Renderer {
     private val modelMatrix = FloatArray(16)
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
-        Log.d("Render", "onSurfaceCreated")
+        super.onSurfaceCreated(p0, p1)
+
         glClearColor(0F, 0F, 0F, 0F)
 
         val vertexShader = ShaderHelper.compileShader(GL_VERTEX_SHADER, vertexShaderCode)
@@ -136,7 +136,8 @@ class AirHockey3DRender : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(p0: GL10?, w: Int, h: Int) {
-        Log.d("Render", "onSurfaceChanged,w:$w,h:$h")
+        super.onSurfaceChanged(p0, w, h)
+
         glViewport(0, 0, w, h)
 
 //        val aspectRatio = if (w > h) w.toFloat() / h else h.toFloat() / w
@@ -161,7 +162,8 @@ class AirHockey3DRender : GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(p0: GL10?) {
-        Log.d("Render", "onDrawFrame")
+        super.onDrawFrame(p0)
+
         glClear(GL_COLOR_BUFFER_BIT)
 
         glUniformMatrix4fv(uMatrixLocation, 1, false, projectionMatrix, 0)

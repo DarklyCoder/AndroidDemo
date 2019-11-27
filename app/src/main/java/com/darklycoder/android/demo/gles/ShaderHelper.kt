@@ -94,7 +94,7 @@ object ShaderHelper {
     }
 
     /**
-     * 加载纹理
+     * 加载纹理，获取纹理id
      */
     fun loadTexture(context: Context, resId: Int): Int {
         val textureObjId = IntArray(1)
@@ -130,6 +130,13 @@ object ShaderHelper {
         glBindTexture(GL_TEXTURE_2D, 0)
 
         return textureObjId[0]
+    }
+
+    fun buildProgram(vertexShaderSource: String, fragmentShaderSource: String): Int {
+        val vertex = compileShader(GL_VERTEX_SHADER, vertexShaderSource)
+        val fragment = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource)
+
+        return linkProgram(vertex, fragment)
     }
 
 }
