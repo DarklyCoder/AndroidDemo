@@ -30,7 +30,6 @@ class AirHockeyBetterMalletsRender(context: Context) : BaseRender(context) {
         |
         |void main()
         |{
-        |    
         |    gl_Position = u_Matrix * a_Position;
         |}
         """.trimMargin()
@@ -95,8 +94,8 @@ class AirHockeyBetterMalletsRender(context: Context) : BaseRender(context) {
         glClearColor(0F, 0F, 0F, 0F)
 
         table = Table()
-        mallet = MalletV2(0.08f, 0.15f, 32)
-        puck = Puck(0.06f, 0.02f, 32)
+        mallet = MalletV2(0.09f, 0.12f, 64)
+        puck = Puck(0.08f, 0.02f, 64)
 
         textureProgram = TextureShaderProgram(textureVertexShaderCode, textureFragmentShaderCode)
         colorProgram = ColorShaderProgramV2(vertexShaderCode, fragmentShaderCode)
@@ -126,16 +125,15 @@ class AirHockeyBetterMalletsRender(context: Context) : BaseRender(context) {
         table.bindData(textureProgram)
         table.draw()
 
-//        positionObjectInScene(0f, mallet.height / 2, -0.4f)
-//        colorProgram.useProgram()
-//        colorProgram.setUniforms(modelViewProjectionMatrix, 1f, 0f, 0f)
-//        mallet.bindData(colorProgram)
-//        mallet.draw()
+        positionObjectInScene(0f, mallet.height / 2, -0.4f)
+        colorProgram.useProgram()
+        colorProgram.setUniforms(modelViewProjectionMatrix, 1f, 0f, 0f)
+        mallet.bindData(colorProgram)
+        mallet.draw()
 
-//        positionObjectInScene(0f, mallet.height / 2, 0.4f)
-//        colorProgram.setUniforms(modelViewProjectionMatrix, 0f, 0f, 1f)
-//        mallet.bindData(colorProgram)
-//        mallet.draw()
+        positionObjectInScene(0f, mallet.height / 2, 0.4f)
+        colorProgram.setUniforms(modelViewProjectionMatrix, 0f, 0f, 1f)
+        mallet.draw()
 
         positionObjectInScene(0f, puck.height / 2, 0f)
         colorProgram.setUniforms(modelViewProjectionMatrix, 0.8f, 0.8f, 1f)
@@ -151,7 +149,7 @@ class AirHockeyBetterMalletsRender(context: Context) : BaseRender(context) {
 
     private fun positionObjectInScene(x: Float, y: Float, z: Float) {
         setIdentityM(modelMatrix, 0)
-        rotateM(modelMatrix, 0, 0F, x, y, z)
+        translateM(modelMatrix, 0, x, y, z)
         multiplyMM(modelViewProjectionMatrix, 0, viewProjectionMatrix, 0, modelMatrix, 0)
     }
 

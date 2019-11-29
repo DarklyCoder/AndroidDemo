@@ -20,11 +20,7 @@ class GeometryHelper {
     class Point(val x: Float, val y: Float, val z: Float) {
 
         fun translateY(distance: Float): Point {
-            return Point(
-                x,
-                y + distance,
-                z
-            )
+            return Point(x, y + distance, z)
         }
     }
 
@@ -34,10 +30,7 @@ class GeometryHelper {
     class Circle(val center: Point, val radius: Float) {
 
         fun scale(scale: Float): Circle {
-            return Circle(
-                center,
-                radius * scale
-            )
+            return Circle(center, radius * scale)
         }
     }
 
@@ -46,7 +39,7 @@ class GeometryHelper {
      */
     class Cylinder(val center: Point, val radius: Float, val height: Float)
 
-    data class GeneratedData(val vertexData: FloatArray, val drawList: List<DrawCommand>)
+    class GeneratedData(val vertexData: FloatArray, val drawList: List<DrawCommand>)
 
     class ObjectBuilder(sizeInVertices: Int) {
 
@@ -63,17 +56,15 @@ class GeometryHelper {
          */
         fun appendCircle(circle: Circle, numPoints: Int) {
             val startVertex = offset / FLOATS_PER_VERTEX
-            val numVertices =
-                sizeOfCircleInVertices(
-                    numPoints
-                )
+            val numVertices = sizeOfCircleInVertices(numPoints)
 
+            // 中间的点
             vertexData[offset++] = circle.center.x
             vertexData[offset++] = circle.center.y
             vertexData[offset++] = circle.center.z
 
             for (i in 0..numPoints) {
-                val angleInRadians = (i * 1F / numPoints) * (Math.PI * 2F)
+                val angleInRadians = (i * 1F / numPoints) * (Math.PI * 2)
 
                 vertexData[offset++] =
                     (circle.center.x + circle.radius * cos(angleInRadians)).toFloat()
@@ -84,8 +75,7 @@ class GeometryHelper {
                     (circle.center.z + circle.radius * sin(angleInRadians)).toFloat()
             }
 
-            drawList.add(object :
-                DrawCommand {
+            drawList.add(object : DrawCommand {
                 override fun draw() {
                     glDrawArrays(GL_TRIANGLE_FAN, startVertex, numVertices)
                 }
@@ -97,16 +87,12 @@ class GeometryHelper {
          */
         fun appendOpenCylinder(cylinder: Cylinder, numPoints: Int) {
             val startVertex = offset / FLOATS_PER_VERTEX
-            val numVertices =
-                sizeOfOpenCylinderInVertices(
-                    numPoints
-                )
-
-            val yStart = cylinder.center.y - (cylinder.height / 2F)
-            val yEnd = cylinder.center.y + (cylinder.height / 2F)
+            val numVertices = sizeOfOpenCylinderInVertices(numPoints)
+            val yStart = cylinder.center.y - (cylinder.height / 2)
+            val yEnd = cylinder.center.y + (cylinder.height / 2)
 
             for (i in 0..numPoints) {
-                val angleInRadians = (i * 1F / numPoints) * (Math.PI * 2F)
+                val angleInRadians = (i * 1F / numPoints) * (Math.PI * 2)
                 val xPosition =
                     (cylinder.center.x + cylinder.radius * cos(angleInRadians)).toFloat()
                 val zPosition =
@@ -121,8 +107,7 @@ class GeometryHelper {
                 vertexData[offset++] = zPosition
             }
 
-            drawList.add(object :
-                DrawCommand {
+            drawList.add(object : DrawCommand {
                 override fun draw() {
                     glDrawArrays(GL_TRIANGLE_STRIP, startVertex, numVertices)
                 }
@@ -130,10 +115,7 @@ class GeometryHelper {
         }
 
         fun build(): GeneratedData {
-            return GeneratedData(
-                vertexData,
-                drawList
-            )
+            return GeneratedData(vertexData, drawList)
         }
 
     }
@@ -158,22 +140,11 @@ class GeometryHelper {
          * 创建冰球(由一个圆柱体顶部和圆柱体侧面构成)
          */
         fun createPuck(puck: Cylinder, numPoints: Int): GeneratedData {
-            val size = sizeOfCircleInVertices(
-                numPoints
-            ) + sizeOfOpenCylinderInVertices(
-                numPoints
-            )
+            val size = sizeOfCircleInVertices(numPoints) + sizeOfOpenCylinderInVertices(numPoints)
 
-            val builder =
-                ObjectBuilder(
-                    size
-                )
+            val builder = ObjectBuilder(size)
 
-            val puckTop =
-                Circle(
-                    puck.center.translateY(puck.height / 2f),
-                    puck.radius
-                )
+            val puckTop = Circle(puck.center.translateY(puck.height / 2), puck.radius)
             builder.appendCircle(puckTop, numPoints)
             builder.appendOpenCylinder(puck, numPoints)
 
@@ -190,44 +161,27 @@ class GeometryHelper {
             numPoints: Int
         ): GeneratedData {
             val size =
-                sizeOfCircleInVertices(
-                    numPoints
-                ) * 2 + sizeOfOpenCylinderInVertices(
-                    numPoints
-                ) * 2
+                (sizeOfCircleInVertices(numPoints) + sizeOfOpenCylinderInVertices(numPoints)) * 2
 
-            val builder =
-                ObjectBuilder(
-                    size
-                )
+            val builder = ObjectBuilder(size)
+
 
             // 创建底部圆柱
             val baseHeight = height * 0.25F
-            val baseCircle =
-                Circle(
-                    center.translateY(-baseHeight),
-                    radius
-                )
+            val baseCircle = Circle(center.translateY(-baseHeight), radius)
             val baseCylinder =
-                Cylinder(
-                    baseCircle.center.translateY(-baseHeight / 2F),
-                    radius,
-                    height
-                )
+                Cylinder(baseCircle.center.translateY(-baseHeight / 2), radius, baseHeight)
 
             builder.appendCircle(baseCircle, numPoints)
             builder.appendOpenCylinder(baseCylinder, numPoints)
 
+            // 创建手柄
             val handleHeight = height * 0.75F
-            val handleRadius = radius / 3F
-            val handleCircle =
-                Circle(
-                    center.translateY(height * 0.5f),
-                    handleRadius
-                )
+            val handleRadius = radius / 3
+            val handleCircle = Circle(center.translateY(height / 2), handleRadius)
             val handleCylinder =
                 Cylinder(
-                    baseCircle.center.translateY(-handleHeight / 2F),
+                    handleCircle.center.translateY(-handleHeight / 2),
                     handleRadius,
                     handleHeight
                 )

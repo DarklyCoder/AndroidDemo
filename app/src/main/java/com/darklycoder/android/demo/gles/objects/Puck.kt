@@ -14,21 +14,9 @@ class Puck(radius: Float, val height: Float, numPointsAroundPuck: Int) {
     private val drawList: List<GeometryHelper.DrawCommand>
 
     init {
-        val cylinder =
-            GeometryHelper.Cylinder(
-                GeometryHelper.Point(
-                    0f,
-                    0f,
-                    0f
-                ),
-                radius,
-                height
-            )
-        val generatedData =
-            GeometryHelper.createPuck(
-                cylinder,
-                numPointsAroundPuck
-            )
+        val cylinder = GeometryHelper.Cylinder(GeometryHelper.Point(0f, 0f, 0f), radius, height)
+
+        val generatedData = GeometryHelper.createPuck(cylinder, numPointsAroundPuck)
 
         vertexArray = VertexArray(generatedData.vertexData)
         drawList = generatedData.drawList
