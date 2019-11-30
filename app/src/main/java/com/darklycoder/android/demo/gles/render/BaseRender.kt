@@ -22,4 +22,12 @@ open class BaseRender(context: Context) : GLSurfaceView.Renderer {
         Log.d("Render", "onDrawFrame")
     }
 
+    open fun handleTouchPress(normalX: Float, normalY: Float) {
+        Log.d("Render", "handleTouchPress,normalX:$normalX,normalY:$normalY")
+    }
+
+    open fun handleTouchMove(normalX: Float, normalY: Float) {
+        Log.d("Render", "handleTouchMove,normalX:$normalX,normalY:$normalY")
+    }
+
 }

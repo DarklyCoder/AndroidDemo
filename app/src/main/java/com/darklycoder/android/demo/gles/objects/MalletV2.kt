@@ -4,7 +4,7 @@ import com.darklycoder.android.demo.gles.data.VertexArray
 import com.darklycoder.android.demo.gles.program.ColorShaderProgramV2
 import com.darklycoder.android.demo.gles.utils.GeometryHelper
 
-class MalletV2(radius: Float, val height: Float, numPointsAroundMallet: Int) {
+class MalletV2(val radius: Float, val height: Float, numPointsAroundMallet: Int) {
 
     companion object {
         private const val POSITION_COMPONENT_COUNT = 3

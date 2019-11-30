@@ -4,7 +4,7 @@ import com.darklycoder.android.demo.gles.data.VertexArray
 import com.darklycoder.android.demo.gles.program.ColorShaderProgramV2
 import com.darklycoder.android.demo.gles.utils.GeometryHelper
 
-class Puck(radius: Float, val height: Float, numPointsAroundPuck: Int) {
+class Puck(val radius: Float, val height: Float, numPointsAroundPuck: Int) {
 
     companion object {
         private const val POSITION_COMPONENT_COUNT = 3
