@@ -20,12 +20,14 @@ class EmptyRender(context: Context) : BaseRender(context) {
     override fun onSurfaceChanged(p0: GL10?, w: Int, h: Int) {
         super.onSurfaceChanged(p0, w, h)
 
+        // 设置视窗大小
         glViewport(0, 0, w, h)
     }
 
     override fun onDrawFrame(p0: GL10?) {
         super.onDrawFrame(p0)
 
+        // 清除缓存
         glClear(GL_COLOR_BUFFER_BIT)
     }
 

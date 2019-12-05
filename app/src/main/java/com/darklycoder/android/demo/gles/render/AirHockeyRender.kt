@@ -11,7 +11,7 @@ import javax.microedition.khronos.opengles.GL10
 /**
  * 绘制曲棍球
  *
- * 绘制桌面
+ * 绘制简单桌面
  */
 class AirHockeyRender(context: Context) : BaseRender(context) {
 
@@ -31,9 +31,11 @@ class AirHockeyRender(context: Context) : BaseRender(context) {
         0.5f, -0.5f,
         0.5f, 0.5f,
 
+        // line
         -0.5f, 0f,
         0.5f, 0f,
 
+        // point
         0f, -0.25f,
         0f, 0.25f
     )
@@ -107,12 +109,15 @@ class AirHockeyRender(context: Context) : BaseRender(context) {
 
         glClear(GL_COLOR_BUFFER_BIT)
 
+        // 绘制三角形
         glUniform4f(uColorLocation, 1f, 1f, 1f, 1f)
         glDrawArrays(GL_TRIANGLES, 0, 6)
 
+        // 绘制line
         glUniform4f(uColorLocation, 1f, 0f, 1f, 1f)
         glDrawArrays(GL_LINES, 6, 2)
 
+        // 绘制point
         glUniform4f(uColorLocation, 0f, 0f, 1f, 1f)
         glDrawArrays(GL_POINTS, 8, 1)
 

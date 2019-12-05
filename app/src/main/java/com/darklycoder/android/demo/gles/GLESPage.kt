@@ -4,8 +4,7 @@ import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.view.MotionEvent
 import com.darklycoder.android.demo.base.BasePage
-import com.darklycoder.android.demo.gles.render.AirHockeyTouchRender
-import com.darklycoder.android.demo.gles.render.BaseRender
+import com.darklycoder.android.demo.gles.render.*
 
 /**
  * GLES demo
@@ -26,7 +25,7 @@ class GLESPage : BasePage() {
     private fun initParams() {
         mGlSurfaceView.setEGLContextClientVersion(2)
 
-        val render = createRender()
+        val render = createRender(8)
         mGlSurfaceView.setRenderer(render)
 
         mGlSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
@@ -63,15 +62,17 @@ class GLESPage : BasePage() {
         mGlSurfaceView.onPause()
     }
 
-    private fun createRender(): BaseRender {
-//        return EmptyRender(this)
-//        return AirHockeyRender(this)
-//        return AirHockey2Render(this)
-//        return AirHockey3Render(this)
-//        return AirHockey3DRender(this)
-//        return AirHockeyTexturedRender(this)
-//        return AirHockeyBetterMalletsRender(this)
-        return AirHockeyTouchRender(this)
+    private fun createRender(type: Int = 1): BaseRender {
+        return when (type) {
+            2 -> AirHockeyRender(this)
+            3 -> AirHockey2Render(this)
+            4 -> AirHockey3Render(this)
+            5 -> AirHockey3DRender(this)
+            6 -> AirHockeyTexturedRender(this)
+            7 -> AirHockeyBetterMalletsRender(this)
+            8 -> AirHockeyTouchRender(this)
+            else -> EmptyRender(this)
+        }
     }
 
 }

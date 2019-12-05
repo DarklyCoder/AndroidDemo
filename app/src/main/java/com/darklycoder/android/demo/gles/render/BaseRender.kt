@@ -8,26 +8,27 @@ import javax.microedition.khronos.opengles.GL10
 
 open class BaseRender(context: Context) : GLSurfaceView.Renderer {
 
+    val tag = "OpenGLRender"
     val mContext = context
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
-        Log.d("Render", "onSurfaceCreated")
+        Log.d(tag, "onSurfaceCreated")
     }
 
     override fun onSurfaceChanged(p0: GL10?, w: Int, h: Int) {
-        Log.d("Render", "onSurfaceChanged,w:$w,h:$h")
+        Log.d(tag, "onSurfaceChanged,w:$w,h:$h")
     }
 
     override fun onDrawFrame(p0: GL10?) {
-        Log.d("Render", "onDrawFrame")
+        Log.d(tag, "onDrawFrame")
     }
 
     open fun handleTouchPress(normalX: Float, normalY: Float) {
-        Log.d("Render", "handleTouchPress,normalX:$normalX,normalY:$normalY")
+        Log.d(tag, "handleTouchPress,normalX:$normalX,normalY:$normalY")
     }
 
     open fun handleTouchMove(normalX: Float, normalY: Float) {
-        Log.d("Render", "handleTouchMove,normalX:$normalX,normalY:$normalY")
+        Log.d(tag, "handleTouchMove,normalX:$normalX,normalY:$normalY")
     }
 
 }
